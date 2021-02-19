@@ -1,11 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random
-
+from PIL import Image
 
 class ReactionDiffusion(object):
 
-    def __init__(self, tauxrea, tauxrei, vitessedia, vitessedii, tauxreso, seuilact, size):
+    def __init__(self, tauxrea, tauxrei, vitessedia, vitessedii, tauxreso, seuilact, size,id):
         self.tauxReactionA = tauxrea
         self.tauxReactionI = tauxrei
         self.vitesseDiffusionA = vitessedia
@@ -13,6 +13,7 @@ class ReactionDiffusion(object):
         self.tauxResorption = tauxreso
         self.seuilActivation = seuilact
         self.size = size
+        self.id = id
         self.A = [[0] * self.size for i in range(self.size)]
         self.I = [[0] * self.size for i in range(self.size)]
         self.X = [[0] * self.size for i in range(self.size)]
@@ -125,12 +126,17 @@ class ReactionDiffusion(object):
         plt.title("Plot 2D array")
         plt.show()
 
+    def generateimage(self):
+        self.reagir()
+        self.diffusion()
+        self.resorber()
+        self.seiller()
+        plt.axis('off')
+        plt.gca().set_position([0, 0, 1, 1])
+        plt.imshow(self.X)
+        filename = 'pic/test'+str(self.id)+'.png'
+        plt.savefig(filename)
 
 if __name__ == '__main__':
-    reactiondiffusion = ReactionDiffusion(0.04, 0.0002, 4, 25, 0.06, 122, 500)
-    reactiondiffusion.reagir()
-    reactiondiffusion.diffusion()
-    reactiondiffusion.resorber()
-    reactiondiffusion.seiller()
-    reactiondiffusion.setCouleur()
-
+    reactiondiffusion = ReactionDiffusion(0.04, 0.0002, 4, 25, 0.06, 122, 500,1)
+    reactiondiffusion.generateimage()
