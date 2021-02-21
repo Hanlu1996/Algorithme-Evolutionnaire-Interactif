@@ -17,6 +17,7 @@ class AlgoEvolu(object):
         children = []
         for i in range(5):
             a = random.sample(parents, 2)
+            print(a)
             parent1 = a[0]
             parent2 = a[1]
             x = random.random()

@@ -7,6 +7,7 @@ class Initface():
     def __init__(self, master, png):
         # store id of selected images
         self.select_id = []
+        self.flag = 0
 
         self.master = master
         self.initface = tk.Frame(self.master, width=600, height=1000)
@@ -111,7 +112,7 @@ class Initface():
         self.option9.grid(row=7, column=3)
 
         # Button "OK" make sure the selection
-        self.buttonOK = tk.Button(self.initface, text="    OK   ", bd=10, bg='blue', command=lambda: self.getId())
+        self.buttonOK = tk.Button(self.initface, text="    OK   ", bd=10, bg='blue', command=lambda: self.click())
         self.buttonOK.grid(row=8, column=3, columnspan=1)
 
         # info label of option
@@ -126,5 +127,10 @@ class Initface():
 
     # Return all images id which user selected
     def getId(self):
-        print(self.select_id)
         return self.select_id
+
+    def click(self):
+        self.flag = 1
+
+    def getFlag(self):
+        return self.flag
