@@ -1,17 +1,19 @@
-import numpy as np
 import matplotlib.pyplot as plt
 import random
-from PIL import Image
+
 
 class ReactionDiffusion(object):
 
-    def __init__(self, tauxrea, tauxrei, vitessedia, vitessedii, tauxreso, seuilact, size,id):
+    def __init__(self, tauxrea, tauxrei, vitessedia, vitessedii, tauxreso, seuilact, tauxdiffu, size, id):
         self.tauxReactionA = tauxrea
         self.tauxReactionI = tauxrei
         self.vitesseDiffusionA = vitessedia
+        self.p = vitessedia
+        self.q = vitessedii
         self.vitesseDiffusionI = vitessedii
         self.tauxResorption = tauxreso
         self.seuilActivation = seuilact
+        self.tauxDiffusion = tauxdiffu
         self.size = size
         self.id = id
         self.A = [[0] * self.size for i in range(self.size)]
@@ -23,6 +25,11 @@ class ReactionDiffusion(object):
                 self.I[i][j] = random.random() * 100
                 self.X[i][j] = [255, 165, 0]
 
+    def getAttribute(self):
+        a = [self.tauxReactionA, self.tauxReactionI, self.p, self.q,
+             self.tauxResorption, self.seuilActivation, self.tauxDiffusion]
+        return a
+
     def reagir(self):
         for i in range(self.size):
             for j in range(self.size):
@@ -31,7 +38,6 @@ class ReactionDiffusion(object):
                 self.A[i][j] = self.A[i][j] + (self.tauxReactionA * self.A[i][j] * self.A[i][j] / ancien_i)
 
     def diffusion(self):
-        taux_diffusion = 0.1
         up = -1
         down = -1
         left = -1
@@ -90,7 +96,7 @@ class ReactionDiffusion(object):
                         left = j - 1
                     if right == -1:
                         right = j + 1
-                    temp = self.I[i][j] * taux_diffusion / 8
+                    temp = self.I[i][j] * self.tauxDiffusion / 8
                     self.I[i][left] = self.I[i][left] + temp
                     self.I[i][right] = self.I[i][right] + temp
                     self.I[up][j] = self.I[up][j] + temp
@@ -134,9 +140,5 @@ class ReactionDiffusion(object):
         plt.axis('off')
         plt.gca().set_position([0, 0, 1, 1])
         plt.imshow(self.X)
-        filename = 'pic/test'+str(self.id)+'.png'
+        filename = 'pic/test' + str(self.id) + '.png'
         plt.savefig(filename)
-
-if __name__ == '__main__':
-    reactiondiffusion = ReactionDiffusion(0.04, 0.0002, 4, 25, 0.06, 122, 500,1)
-    reactiondiffusion.generateimage()
